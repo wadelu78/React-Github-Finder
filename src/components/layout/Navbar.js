@@ -1,7 +1,7 @@
 import React, { Component } from "react"
 import PropTypes from "prop-types"
 
-export class Navbar extends Component {
+class Navbar extends Component {
   static defaultProps = {
     title: "Github Finder",
     icon: "fab fa-github"
@@ -33,4 +33,4 @@ export default Navbar
 //  }
 // this is the defaultProps
 
-//3. Type checking propTypes
+//3. Type checking propTypes, to make the app more robust.
