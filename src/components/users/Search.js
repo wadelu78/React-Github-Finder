@@ -9,7 +9,8 @@ class Search extends Component {
   static propTypes = {
     searchUsers: PropTypes.func.isRequired,
     clearUsers: PropTypes.func.isRequired,
-    showClear: PropTypes.bool.isRequired
+    showClear: PropTypes.bool.isRequired,
+    setAlert: PropTypes.func.isRequired
   }
 
   onChange = e => {
@@ -26,15 +27,19 @@ class Search extends Component {
 
   onSubmit = e => {
     e.preventDefault()
-    //pass this value "up" to the app.js through props
-    //props pass "down" a function and here we invoke this function by using
-    //"this.state.text" as the arguments
-    this.props.searchUsers(this.state.text)
+    if (this.state.text === '') {
+      this.props.setAlert('Please enter something', 'light')
+    } else {
+      //pass this value "up" to the app.js through props
+      //props pass "down" a function and here we invoke this function by using
+      //"this.state.text" as the arguments
+      this.props.searchUsers(this.state.text)
 
-    //clear the input control
-    this.setState({
-      text: ''
-    })
+      //clear the input control
+      this.setState({
+        text: ''
+      })
+    }
   }
 
   // onSubmit(e) {
