@@ -1,19 +1,19 @@
-import React, { Component } from 'react'
-import PropTypes from 'prop-types'
+import React, { useState, useContext } from 'react'
+//import PropTypes from 'prop-types'
+import GithubContext from '../../context/github/githubContext'
+import AlertContext from '../../context/alert/alertContext'
 
-class Search extends Component {
-  state = {
-    text: ''
-  }
+const Search = () => {
+  const githubContext = useContext(GithubContext)
+  const alertContext = useContext(AlertContext)
 
-  static propTypes = {
-    searchUsers: PropTypes.func.isRequired,
-    clearUsers: PropTypes.func.isRequired,
-    showClear: PropTypes.bool.isRequired,
-    setAlert: PropTypes.func.isRequired
-  }
+  // state = {
+  //   text: ''
+  // }
+  const [text, setText] = useState('')
 
-  onChange = e => {
+  const onChange = e => {
+    /*
     this.setState({
       //text: e.target.value
       //In ES6, objects can be created with computed keys:
@@ -22,23 +22,27 @@ class Search extends Component {
       // [mykey]: value,
       //}
       [e.target.name]: e.target.value
-    })
+    })*/
+    setText(e.target.value)
   }
 
-  onSubmit = e => {
+  const onSubmit = e => {
     e.preventDefault()
-    if (this.state.text === '') {
-      this.props.setAlert('Please enter something', 'light')
+    if (text === '') {
+      alertContext.setAlert('Please enter something', 'light')
     } else {
       //pass this value "up" to the app.js through props
       //props pass "down" a function and here we invoke this function by using
       //"this.state.text" as the arguments
-      this.props.searchUsers(this.state.text)
+      //searchUsers(text)
+
+      githubContext.searchUsers(text)
 
       //clear the input control
-      this.setState({
-        text: ''
-      })
+      // this.setState({
+      //   text: ''
+      // })
+      setText('')
     }
   }
 
@@ -47,34 +51,43 @@ class Search extends Component {
   //   console.log(this.state.text)
   // }
 
-  render() {
-    const { showClear, clearUsers } = this.props
-    return (
-      <div>
-        {/* <form onSubmit={this.onSubmit.bind(this)} className="form"> */}
-        <form onSubmit={this.onSubmit} className="form">
-          <input
-            type="text"
-            name="text"
-            placeholder="Search Users..."
-            value={this.state.text}
-            onChange={this.onChange}
-          />
-          <input
-            type="submit"
-            value="Search"
-            className="btn btn-dark btn-block"
-          />
-        </form>
-        {showClear && (
-          <button className="btn btn-light btn-block" onClick={clearUsers}>
-            Clear
-          </button>
-        )}
-      </div>
-    )
-  }
+  return (
+    <div>
+      {/* <form onSubmit={this.onSubmit.bind(this)} className="form"> */}
+      <form onSubmit={onSubmit} className="form">
+        <input
+          type="text"
+          name="text"
+          placeholder="Search Users..."
+          // value={this.state.text}
+          value={text}
+          // onChange={this.onChange}
+          onChange={onChange}
+        />
+        <input
+          type="submit"
+          value="Search"
+          className="btn btn-dark btn-block"
+        />
+      </form>
+      {githubContext.users.length > 0 && (
+        <button
+          className="btn btn-light btn-block"
+          onClick={githubContext.clearUsers}
+        >
+          Clear
+        </button>
+      )}
+    </div>
+  )
 }
+
+//Search.propTypes = {
+//searchUsers: PropTypes.func.isRequired,
+//clearUsers: PropTypes.func.isRequired,
+//showClear: PropTypes.bool.isRequired,
+//setAlert: PropTypes.func.isRequired
+//}
 
 export default Search
 
